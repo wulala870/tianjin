@@ -8,46 +8,61 @@
   <style>
     * {
       margin: 0; padding: 0;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
     }
 
     #name {
       color: white;
-      font-size: 20px;
+      font-size: 20rem;
       position: absolute;
-      top: 25px;
-      right: 105px;
+      top: 25rem;
+      right: 105rem;
     }
 
     #date {
       color: #111;
-      font-size: 20px;
+      font-size: 20rem;
       position: absolute;
-      top: 215px;
+      top: 216rem;
       text-align: center;
       left: 0;
       right: 0;
-      font-weight: bold;
     }
 
     #time {
       color: #111;
-      font-size: 33px;
+      font-size: 31rem;
       position: absolute;
-      top: 245px;
+      top: 245rem;
       text-align: center;
       left: 0;
       right: 0;
-      font-weight: bold;
+    }
+
+    #qrcode_area {
+      width: 260rem;
+      height: 260rem;
+      position: absolute;
+      top: 300rem;
+      left: 50rem;
     }
 
     #scan_time {
       color: #1873f7;
-      font-size: 18px;
+      font-size: 17rem;
       position: absolute;
-      top: 570px;
+      top: 564rem;
       text-align: center;
-      left: 120px;
-      font-weight: bold;
+      left: 122rem;
+    }
+
+    #scan_loc {
+      color: #1873f7;
+      font-size: 17rem;
+      position: absolute;
+      top: 588rem;
+      text-align: center;
+      left: 122rem;
     }
   </style>
 
@@ -55,14 +70,43 @@
 
   </script>
 </head>
-<body style="position: relative;">
-  <img src="images/app_bg_edit.jpg" style="width: 100%" />
-  <img src="images/app_24hr.jpg" style="width: 100%; position: absolute; left: 0; right: 0; top: 120px;" />
-  <div id="name">姓**</div>
-  <div id="date">2022年09月28日(周三)</div>
-  <div id="time">00:00:00</div>
-  <div id="scan_time">2022-09-28 00:00:00</div>
-  <div id="scan_loc">lalalalalal</div>
-  <img src="images/app_bg" style="width: 100%; position: absolute; left: 0; right: 0; top: -2px; opacity: 0.1;" />
+<body>
+  <div id="show_panel" style="position: relative;">
+    <img src="images/app_bg_edit.jpg" style="width: 100%" />
+    <img src="images/app_24hr.jpg" style="width: 100%; position: absolute; left: 0; right: 0; top: 120px;" />
+    <div id="name">姓**</div>
+    <div id="date"></div>
+    <div id="time"></div>
+    <div id="scan_time"></div>
+    <div id="scan_loc">lalalalalal</div>
+    <div id="qrcode_area" onclick="javascript: click_qrcode()"></div>
+    <!-- <img src="images/app_bg" style="width: 100%; position: absolute; left: 0; right: 0; top: -2px; opacity: 0.1;" /> -->
+  </div>
+  <div id="setting_panel">
+  
+  </div>
 </body>
+
+<script src="./moment.min.js"></script>
+<script>
+  moment.updateLocale('en', {
+    weekdays: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+  });
+  document.querySelector('html').style.fontSize = (document.documentElement.clientWidth / 390) + 'px';
+
+  document.getElementById('time').innerHTML = moment().format('HH:mm:ss');
+  document.getElementById('date').innerHTML = moment().format('YYYY-MM-DD(dddd)');
+  document.getElementById('scan_time').innerHTML = moment().format('YYYY-MM-DD HH:mm:ss');
+  setInterval(function() {
+    document.getElementById('time').innerHTML = moment().format('HH:mm:ss');
+  }, 1000);
+
+  var qrcode_click_times = 0;
+  function click_qrcode() {
+    if(++qrcode_click_times === 10) {
+      document.getElementById('show_panel').style.display = 'none';
+      qrcode_click_times = 0;
+    }
+  }
+</script>
 </html>
