@@ -76,15 +76,19 @@
     }
 
     .nuclear_cell {
-      background: linear-gradient(#298a68,#58b088);
+      /* background: linear-gradient(#298a68,#58b088); */
       position: absolute;
       top: 6rem;
       width: 66rem;
       height: 63rem;
       border-radius: 5rem;
       pointer-events: none;
-      /* opacity: 0.5; */
       color: white;
+    }
+    
+
+    .nuclear_cell_disable {
+      /* background: linear-gradient(#f1955d,#f2b569); */
     }
 
     .nuclear_cell .digital {
@@ -134,7 +138,7 @@
     <div id="scan_time"></div>
     <div id="scan_loc" onclick="javascript: click_scanloc()"></div>
     <div id="qrcode_area" onclick="javascript: click_qrcode()"></div>
-    <div id="nuclear_area">
+    <div id="nuclear_area" onclick="javascript: click_nuclear()">
       <div class="nuclear_cell" id="nuclear_1">
         <span class="digital">24</span>
         <span class="text">小时</span>
@@ -182,6 +186,7 @@
   document.getElementById('scan_time').innerHTML = moment().format('YYYY-MM-DD HH:mm:ss');
   update_by_key('name', NAME_DEFAULT);
   update_by_key('scan_loc', SCANLOC_DEFAULT);
+  render_nuclear_cell();
   
   // 让时间动起来
   setInterval(function() {
@@ -221,6 +226,27 @@
       update_by_key('scan_loc', SCANLOC_DEFAULT);
       scanloc_click_times = 0;
     }
+  }
+
+  // 点击核酸一排
+  var nuclear_click_times = 0;
+  function click_nuclear() {
+    if(++nuclear_click_times === 10) {
+      var nuclear_id = prompt('输入从1-5的数字，输入几就是从第几个开始是绿的', get_by_key('nuclear_id', 1));
+      save_by_key('nuclear_id', nuclear_id);
+      render_nuclear_cell();
+      nuclear_click_times = 0;
+    }
+  }
+
+  // 初始化核酸
+  function render_nuclear_cell() {
+    var nuclear_id = +get_by_key('nuclear_id', 1);
+    [1,2,3,4,5].forEach(function(id) {
+      var dom = document.getElementById('nuclear_' + id);
+      if(id < nuclear_id) dom.style.background = 'linear-gradient(#f1955d,#f2b569)';  // 橘黄色
+      else dom.style.background = 'linear-gradient(#298a68,#58b088)';  // 绿色
+    });
   }
 
   // utils
