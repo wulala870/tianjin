@@ -17281,7 +17281,7 @@
                     <div class="result-tit">采集地点</div>
                     <div class="result-content" style="margin-bottom: 10px;" id="loc"></div>
                     <div class="result-tit">检测结果</div>
-                    <div class="result-content" id="res">--</div>
+                    <div class="result-content" id="res"></div>
                   </div>
                 </div>
               </div>
@@ -17338,31 +17338,14 @@
     <div class="x-tip-anchor x-tip-anchor-top" id="syno-nsc-ext-gen9" style="z-index: 11001;"></div>
   </div>
 </body>
-<grammarly-desktop-integration data-grammarly-shadow-root="true"><template data-savepage-shadowroot="">
-    <style>
-      div.grammarly-desktop-integration {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      div.grammarly-desktop-integration:before {
-        content: attr(data-content);
-      }
-    </style>
-    <div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration"
-      data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}">
-    </div>
-  </template></grammarly-desktop-integration>
+<script src="./moment.min.js"></script>
+<script>
+  var url = new URL(location);
+  var search = url.searchParams;
+  document.getElementById('id').innerHTML = search.get('id') || '--';
+  document.getElementById('time').innerHTML = search.get('time') || moment().format('YYYY-DD-MM 07:50:06');
+  document.getElementById('loc').innerHTML = search.get('loc') || '河北区';
+  document.getElementById('res').innerHTML = search.get('res') || '--';
+</script>
 
 </html>
