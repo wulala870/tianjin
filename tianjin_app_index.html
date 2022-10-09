@@ -74,11 +74,11 @@
   <div id="show_panel" style="position: relative;">
     <img src="images/app_bg_edit.jpg" style="width: 100%" />
     <img src="images/app_24hr.jpg" style="width: 100%; position: absolute; left: 0; right: 0; top: 120px;" />
-    <div id="name">姓**</div>
+    <div id="name" onclick="javascript: click_name()"></div>
     <div id="date"></div>
     <div id="time"></div>
     <div id="scan_time"></div>
-    <div id="scan_loc">lalalalalal</div>
+    <div id="scan_loc" onclick="javascript: click_scanloc()"></div>
     <div id="qrcode_area" onclick="javascript: click_qrcode()"></div>
     <!-- <img src="images/app_bg" style="width: 100%; position: absolute; left: 0; right: 0; top: -2px; opacity: 0.1;" /> -->
   </div>
@@ -89,24 +89,75 @@
 
 <script src="./moment.min.js"></script>
 <script>
+  var NAME_DEFAULT = '王小二';
+  var SCANLOC_DEFAULT = '地点地点地点地点地点地点';
+
+  // 移动端适配
+  document.querySelector('html').style.fontSize = (document.documentElement.clientWidth / 390) + 'px';
+
+  // 星期字符串适配
   moment.updateLocale('en', {
     weekdays: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
   });
-  document.querySelector('html').style.fontSize = (document.documentElement.clientWidth / 390) + 'px';
-
+  
+  // 初始化内容
   document.getElementById('time').innerHTML = moment().format('HH:mm:ss');
   document.getElementById('date').innerHTML = moment().format('YYYY-MM-DD(dddd)');
   document.getElementById('scan_time').innerHTML = moment().format('YYYY-MM-DD HH:mm:ss');
+  update_by_key('name', NAME_DEFAULT);
+  update_by_key('scan_loc', SCANLOC_DEFAULT);
+  
+  // 让时间动起来
   setInterval(function() {
     document.getElementById('time').innerHTML = moment().format('HH:mm:ss');
   }, 1000);
 
+  // 点击二维码区域
   var qrcode_click_times = 0;
   function click_qrcode() {
     if(++qrcode_click_times === 10) {
       document.getElementById('show_panel').style.display = 'none';
       qrcode_click_times = 0;
     }
+  }
+
+  // 点击名字
+  var name_click_times = 0;
+  function click_name() {
+    if(++name_click_times === 10) {
+      var name = prompt('输入名字', get_by_key('name', NAME_DEFAULT));
+      save_by_key('name', name);
+      update_by_key('name', NAME_DEFAULT);
+      name_click_times = 0;
+    }
+
+    var name_dom = document.getElementById('name');
+    if(name_dom.innerHTML.indexOf('*')>-1) name_dom.innerHTML = get_by_key('name', NAME_DEFAULT)
+    else name_dom.innerHTML = get_by_key('name', NAME_DEFAULT).slice(0, 1) + '**';
+  }
+
+  // 点击场所名称
+  var scanloc_click_times = 0;
+  function click_scanloc() {
+    if(++scanloc_click_times === 10) {
+      var scanloc = prompt('输入场所名称', get_by_key('scan_loc', SCANLOC_DEFAULT));
+      save_by_key('scan_loc', scanloc);
+      update_by_key('scan_loc', SCANLOC_DEFAULT);
+      scanloc_click_times = 0;
+    }
+  }
+
+  // utils
+  function update_by_key(key, defaultValue) {
+    document.getElementById(key).innerHTML = get_by_key(key, defaultValue);
+  }
+
+  function get_by_key(key, defaultValue) {
+    return localStorage.getItem('tianjin_'+key) || defaultValue;
+  }
+
+  function save_by_key(key, value) {
+    localStorage.setItem('tianjin_'+key, value);
   }
 </script>
 </html>
